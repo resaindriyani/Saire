@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Pendaftaran</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-xl mx-auto bg-white p-8 rounded-xl shadow border border-gray-100">
+        <h2 class="text-2xl font-bold mb-2 text-gray-800">Form Pendaftaran Magang</h2>
+        <p class="text-gray-500 text-sm mb-6">Lengkapi data dan upload dokumen yang diperlukan.</p>
+
+        @if ($errors->any())
+            <div class="bg-red-50 border border-red-200 text-red-600 p-3 rounded-lg mb-4 text-sm">
+                <ul class="list-disc ml-4">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        {{-- enctype wajib ada biar file bisa terupload --}}
+        <form action="{{ route('pelamar.simpanForm') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+
+            <div class="mb-4">
+                <label class="block font-bold mb-2 text-gray-700">Asal Universitas</label>
+                <input type="text" name="universitas" value="{{ old('universitas') }}"
+                    class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-red-500 outline-none"
+                    placeholder="Contoh: Universitas Telkom" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-bold mb-2 text-gray-700">Tanggal Mulai Magang</label>
+                <input type="date" name="tgl_mulai" id="tgl_mulai" value="{{ old('tgl_mulai') }}"
+                    class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-red-500 outline-none" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="block font-bold mb-2 text-gray-700">Tanggal Selesai Magang</label>
+                <input type="date" name="tgl_selesai" id="tgl_selesai" value="{{ old('tgl_selesai') }}"
+                    class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-red-500 outline-none" required>
+            </div>
+
+            {{-- Durasi dihitung otomatis, tidak perlu diisi manual --}}
+            <div class="mb-6">
+                <label class="block font-bold mb-2 text-gray-700">Durasi Magang</label>
+                <div class="w-full border border-gray-200 bg-gray-50 p-3 rounded-lg text-gray-600 text-sm" id="durasi_label">
+                    Otomatis dihitung setelah pilih tanggal
+                </div>
+                <input type="hidden" name="durasi_bulan" id="durasi_bulan">
+            </div>
+
+            {{-- Upload Dokumen --}}
+            <div class="mb-6">
+                <p class="font-bold mb-3 text-gray-700">Upload Dokumen Wajib</p>
+
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1 text-gray-600">CV / Curriculum Vitae <span class="text-red-500">*</span></label>
+                    <input type="file" name="cv" accept=".pdf,.jpg,.jpeg"
+                        class="w-full border border-gray-300 p-2 rounded-lg text-sm text-gray-600 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-red-50 file:text-red-600 file:font-medium hover:file:bg-red-100"
+                        required>
+                    <p class="text-xs text-gray-400 mt-1">Format: PDF atau JPG. Maks 2MB.</p>
+                </div>
+
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1 text-gray-600">Transkrip Nilai <span class="text-red-500">*</span></label>
+                    <input type="file" name="transkrip" accept=".pdf,.jpg,.jpeg"
+                        class="w-full border border-gray-300 p-2 rounded-lg text-sm text-gray-600 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-red-50 file:text-red-600 file:font-medium hover:file:bg-red-100"
+                        required>
+                    <p class="text-xs text-gray-400 mt-1">Format: PDF atau JPG. Maks 2MB.</p>
+                </div>
+
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1 text-gray-600">Surat Pengantar dari Kampus <span class="text-red-500">*</span></label>
+                    <input type="file" name="surat_pengantar" accept=".pdf,.jpg,.jpeg"
+                        class="w-full border border-gray-300 p-2 rounded-lg text-sm text-gray-600 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-red-50 file:text-red-600 file:font-medium hover:file:bg-red-100"
+                        required>
+                    <p class="text-xs text-gray-400 mt-1">Format: PDF atau JPG. Maks 2MB.</p>
+                </div>
+            </div>
+
+            <button type="submit"
+                class="bg-red-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-red-700 transition w-full">
+                Kirim Pendaftaran
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Hitung durasi otomatis saat tanggal diubah
+        function hitungDurasi() {
+            const mulai = document.getElementById('tgl_mulai').value;
+            const selesai = document.getElementById('tgl_selesai').value;
+            if (!mulai || !selesai) return;
+
+            const tMulai = new Date(mulai);
+            const tSelesai = new Date(selesai);
+
+            if (tSelesai <= tMulai) {
+                document.getElementById('durasi_label').textContent = '⚠ Tanggal selesai harus setelah tanggal mulai';
+                document.getElementById('durasi_bulan').value = '';
+                return;
+            }
+
+            const bulan = (tSelesai.getFullYear() - tMulai.getFullYear()) * 12
+                        + (tSelesai.getMonth() - tMulai.getMonth());
+
+            document.getElementById('durasi_label').textContent = bulan + ' bulan';
+            document.getElementById('durasi_bulan').value = bulan;
+        }
+
+        document.getElementById('tgl_mulai').addEventListener('change', hitungDurasi);
+        document.getElementById('tgl_selesai').addEventListener('change', hitungDurasi);
+    </script>
+</body>
+</html>
