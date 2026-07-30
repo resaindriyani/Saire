@@ -1,0 +1,36 @@
+services:
+  app:
+    build: .
+    container_name: simagang-app
+    ports:
+      - "8090:8080"
+    env_file:
+      - .env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - simagang-network
+  mysql:
+    image: mysql:8.0
+    container_name: simagang-mysql
+    env_file:
+      - .env
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - simagang-mysql-data:/var/lib/mysql
+    ports:
+      - "3309:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+    networks:
+      - simagang-network
+volumes:
+  simagang-mysql-data:
+networks:
+  simagang-network:
+    driver: bridge
