@@ -106,7 +106,7 @@ class AuthController extends Controller
                 'user_id'      => $user->id,
                 'universitas'  => $request->universitas ?? $request->institusi ?? '-',
                 'tgl_mulai'    => now()->toDateString(),
-                'tgl_selesai'  => now()->addMonths($request->durasi_bulan ?? 3)->toDateString(),
+                'tgl_selesai'  => now()->addMonths((int) ($request->durasi_bulan ?? 3))->toDateString(),
                 'durasi_bulan' => $request->durasi_bulan ?? 3,
                 'status'       => 'pending',
             ]);
@@ -128,7 +128,7 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->route('verification.notice');
+        return redirect()->route('pelamar.dashboard');
     }
 
     public function logout(Request $request)

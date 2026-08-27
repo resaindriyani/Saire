@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
 // ==========================================
 // 3. RUTE DASHBOARD (Proteksi auth + verified)
 // ==========================================
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/testimoni/store', [TestimoniController::class, 'store'])->name('testimoni.store');

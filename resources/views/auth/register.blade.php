@@ -41,7 +41,7 @@
                 </button>
             </div>
 
-            <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data" class="p-6">
+            <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data" class="p-6" novalidate>
                 @csrf
 
                 {{-- Error --}}

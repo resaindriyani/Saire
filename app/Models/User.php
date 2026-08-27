@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail; // 1. Tambahkan ini
+// MustVerifyEmail dihapus - verifikasi email tidak diperlukan
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements MustVerifyEmail // 2. Tambahkan implementasi ini
+class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
