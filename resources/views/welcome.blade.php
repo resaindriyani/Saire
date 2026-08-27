@@ -42,7 +42,7 @@
             </div>
             <div class="w-full md:w-1/2 flex justify-center fade-up-delay-2">
                 <div class="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 bg-gradient-to-tr from-red-600 to-red-400 rounded-3xl opacity-90 shadow-2xl flex items-center justify-center transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Telkom_Indonesia_2013.svg" class="w-32 sm:w-48 bg-white p-4 sm:p-6 rounded-2xl shadow-xl">
+                    <img src="{{ asset('logo-simagang.png') }}" class="w-32 sm:w-48 bg-white p-4 sm:p-6 rounded-2xl shadow-xl">
                 </div>
             </div>
         </div>

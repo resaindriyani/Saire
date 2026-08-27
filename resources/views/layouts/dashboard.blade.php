@@ -18,7 +18,7 @@
     <aside id="sidebar" class="w-64 flex flex-col flex-shrink-0 h-full overflow-y-auto z-50" style="background: linear-gradient(180deg, #1a0000 0%, #7f0000 50%, #1a0000 100%);">
         <div class="px-6 py-5 border-b border-white/10">
             <a href="/" class="flex items-center gap-3">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Telkom_Indonesia_2013.svg" class="h-8 bg-white rounded-lg p-1">
+                <img src="{{ asset('logo-simagang.png') }}" class="h-8 bg-white rounded-lg p-1">
                 <span class="font-bold text-white text-base">SiMagang <span class="text-red-400">Telkom</span></span>
             </a>
         </div>

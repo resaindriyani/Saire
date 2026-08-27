@@ -10,7 +10,7 @@
 
     <nav class="bg-white border-b border-gray-200 shadow-sm h-16 flex items-center px-6 justify-between">
         <a href="/" class="flex items-center space-x-2">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Telkom_Indonesia_2013.svg" alt="Logo" class="h-7">
+            <img src="{{ asset('logo-simagang.png') }}" alt="Logo" class="h-7">
             <span class="font-bold text-sm tracking-tight text-gray-900">SiMagang <span class="text-red-600">Telkom</span></span>
         </a>
         <a href="/login" class="text-xs font-bold text-red-600 hover:text-red-700">Sudah punya akun? Masuk</a>
@@ -202,7 +202,9 @@
                                 class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-red-500 focus:bg-white transition-all">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Durasi (Bulan)</label>
+                            <label class="block text-xs font-bold text-gray-700 uppercase 
+                     
+                            tracking-wider mb-1">Durasi (Bulan)</label>
                             <input type="number" name="durasi_bulan" value="{{ old('durasi_bulan') }}" placeholder="3" min="1"
                                 class="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-red-500 focus:bg-white transition-all">
                         </div>

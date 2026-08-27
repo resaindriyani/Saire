@@ -15,7 +15,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
             
             <a href="/" class="flex items-center space-x-3">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Telkom_Indonesia_2013.svg"
+                <img src="{{ asset('logo-simagang.png') }}"
                     alt="Logo Telkom" class="h-9 p-1 bg-white rounded-lg shadow-sm border border-gray-200">
                 <span class="font-bold text-lg tracking-tight text-gray-900">SiMagang <span class="text-red-600">Telkom</span></span>
             </a>
