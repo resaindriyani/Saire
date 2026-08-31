@@ -16,9 +16,8 @@
             
             <a href="/" class="flex items-center space-x-3">
                 <img src="{{ asset('logo-simagang.png') }}"
-                    alt="Logo Telkom" class="h-9 p-1 bg-white rounded-lg shadow-sm border border-gray-200">
-                <span class="font-bold text-lg tracking-tight text-gray-900">SiMagang <span class="text-red-600">Telkom</span></span>
-            </a>
+                    alt="Logo Telkom" class="h-10">
+                </a>
 
             <div class="hidden md:flex items-center space-x-6">
                 @auth

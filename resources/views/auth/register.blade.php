@@ -10,9 +10,8 @@
 
     <nav class="bg-white border-b border-gray-200 shadow-sm h-16 flex items-center px-6 justify-between">
         <a href="/" class="flex items-center space-x-2">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/bb/Telkom_Indonesia_2013.svg" alt="Logo" class="h-7">
-            <span class="font-bold text-sm tracking-tight text-gray-900">SiMagang <span class="text-red-600">Telkom</span></span>
-        </a>
+            <img src="{{ asset('logo-simagang.png') }}" alt="Logo" class="h-10">
+            </a>
         <a href="/login" class="text-xs font-bold text-red-600 hover:text-red-700">Sudah punya akun? Masuk</a>
     </nav>
 

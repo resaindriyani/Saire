@@ -19,9 +19,8 @@
     <aside id="sidebar" class="w-64 flex flex-col flex-shrink-0 h-full overflow-y-auto z-50 fixed md:static inset-y-0 left-0 -translate-x-full md:translate-x-0 transition-transform duration-300" style="background: linear-gradient(180deg, #1a0000 0%, #7f0000 50%, #1a0000 100%);">
         <div class="px-6 py-5 border-b border-white/10">
             <a href="/" class="flex items-center gap-3">
-                <img src="{{ asset('logo-simagang.png') }}" class="h-8 bg-white rounded-lg p-1">
-                <span class="font-bold text-white text-base">SiMagang <span class="text-red-400">Telkom</span></span>
-            </a>
+                <img src="{{ asset('logo-simagang.png') }}" class="h-10">
+                </a>
         </div>
 
         @auth

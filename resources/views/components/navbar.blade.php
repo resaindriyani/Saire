@@ -2,9 +2,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         <div class="flex items-center space-x-3">
             <img src="{{ asset('logo-simagang.png') }}"
-                alt="Logo Telkom" class="h-9 p-1 bg-white rounded-lg shadow-sm border border-gray-200">
-            <span class="font-bold text-lg tracking-tight text-gray-900">SiMagang <span class="text-red-600">Telkom</span></span>
-        </div>
+                alt="Logo Telkom" class="h-10">
+            </div>
 
         <div class="hidden md:flex items-center space-x-6">
             <a href="/" class="font-semibold text-sm transition-colors {{ request()->is('/') ? 'text-red-600' : 'text-gray-700 hover:text-red-600' }}">Beranda</a>
