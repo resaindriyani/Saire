@@ -10,6 +10,7 @@
     <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
         
         <div class="text-center mb-8">
+            <a href="/" class="inline-block text-sm text-gray-400 hover:text-red-600 mb-2">&larr; Kembali ke Beranda</a>
             <h1 class="text-3xl font-extrabold text-red-600">SiMagang</h1>
             <p class="text-gray-500 text-sm mt-1">Sistem Informasi Magang Telkom Sukabumi</p>
         </div>
