@@ -4,6 +4,25 @@
 
 @section('content')
 
+    {{-- Notifikasi Profil Belum Lengkap --}}
+    @if(!$profilLengkap)
+    <div class="relative bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-6 mb-6">
+        <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="text-4xl">⚠️</div>
+                <div>
+                    <h2 class="text-lg font-extrabold text-amber-800">Lengkapi Profil Kamu Dulu</h2>
+                    <p class="text-amber-700 text-sm mt-0.5">Silahkan lengkapi profil sebelum melamar magang.</p>
+                </div>
+            </div>
+            <a href="{{ route('pelamar.profil') }}"
+                class="bg-amber-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-amber-700 transition whitespace-nowrap">
+                Lengkapi Sekarang
+            </a>
+        </div>
+    </div>
+    @endif
+
     {{-- Notifikasi Jadwal Interview Baru --}}
     @if($adaJadwalBaru)
     <div id="notif-interview" class="relative bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 rounded-2xl shadow-lg mb-6 overflow-hidden">
@@ -140,10 +159,16 @@
                     <p class="font-bold text-red-800">Belum Mendaftar</p>
                     <p class="text-sm text-red-600 mt-0.5">Silakan lengkapi data pendaftaran magang kamu.</p>
                 </div>
-                <a href="{{ route('pelamar.form') }}"
-                    class="bg-red-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-red-700 transition whitespace-nowrap">
-                    Daftar Sekarang
-                </a>
+                @if($profilLengkap)
+                    <a href="{{ route('pelamar.form') }}"
+                        class="bg-red-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-red-700 transition whitespace-nowrap">
+                        Daftar Sekarang
+                    </a>
+                @else
+                    <span class="bg-gray-200 text-gray-400 px-5 py-2 rounded-xl text-sm font-bold whitespace-nowrap cursor-not-allowed">
+                        Lengkapi Profil Dulu
+                    </span>
+                @endif
             </div>
         @endif
     </div>
@@ -183,4 +208,3 @@
     </div>
 
 @endsection
-

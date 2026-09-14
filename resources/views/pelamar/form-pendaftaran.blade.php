@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulir Pendaftaran</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 p-8">
     <div class="max-w-xl mx-auto bg-white p-8 rounded-xl shadow border border-gray-100">
@@ -21,9 +21,21 @@
             </div>
         @endif
 
-        {{-- enctype wajib ada biar file bisa terupload --}}
         <form action="{{ route('pelamar.simpanForm') }}" method="POST" enctype="multipart/form-data">
             @csrf
+
+            <div class="mb-4">
+                <label class="block font-bold mb-2 text-gray-700">Pilih Lowongan</label>
+                <select name="lowongan_id"
+                    class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-red-500 outline-none">
+                    <option value="">-- Umum / Belum ada lowongan spesifik --</option>
+                    @foreach($lowongans as $lowongan)
+                        <option value="{{ $lowongan->id }}" {{ (string) $lowonganTerpilih === (string) $lowongan->id ? 'selected' : '' }}>
+                            {{ $lowongan->judul }} (Kuota: {{ $lowongan->kuota }}, Tutup: {{ $lowongan->tgl_tutup->format('d M Y') }})
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
             <div class="mb-4">
                 <label class="block font-bold mb-2 text-gray-700">Asal Universitas</label>
@@ -44,7 +56,6 @@
                     class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-red-500 outline-none" required>
             </div>
 
-            {{-- Durasi dihitung otomatis, tidak perlu diisi manual --}}
             <div class="mb-6">
                 <label class="block font-bold mb-2 text-gray-700">Durasi Magang</label>
                 <div class="w-full border border-gray-200 bg-gray-50 p-3 rounded-lg text-gray-600 text-sm" id="durasi_label">
@@ -53,7 +64,6 @@
                 <input type="hidden" name="durasi_bulan" id="durasi_bulan">
             </div>
 
-            {{-- Upload Dokumen --}}
             <div class="mb-6">
                 <p class="font-bold mb-3 text-gray-700">Upload Dokumen Wajib</p>
 
@@ -90,7 +100,6 @@
     </div>
 
     <script>
-        // Hitung durasi otomatis saat tanggal diubah
         function hitungDurasi() {
             const mulai = document.getElementById('tgl_mulai').value;
             const selesai = document.getElementById('tgl_selesai').value;
@@ -100,7 +109,7 @@
             const tSelesai = new Date(selesai);
 
             if (tSelesai <= tMulai) {
-                document.getElementById('durasi_label').textContent = '⚠ Tanggal selesai harus setelah tanggal mulai';
+                document.getElementById('durasi_label').textContent = 'Tanggal selesai harus setelah tanggal mulai';
                 document.getElementById('durasi_bulan').value = '';
                 return;
             }

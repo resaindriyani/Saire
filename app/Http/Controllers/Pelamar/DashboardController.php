@@ -22,6 +22,13 @@ class DashboardController extends Controller
         $lamaranTerakhir = Lamaran::where('user_id', $user->id)->latest()->first();
         $profil          = ProfilPelamar::where('user_id', $user->id)->first();
 
+        $profilLengkap = $profil
+            && $profil->foto
+            && $profil->nim_nis
+            && $profil->no_hp
+            && $profil->institusi
+            && $profil->jurusan;
+
         $jadwal        = null;
         $adaJadwalBaru = false;
 
@@ -32,23 +39,29 @@ class DashboardController extends Controller
                 ->exists();
         }
 
-        return view('pelamar.dashboard', compact('user', 'lamaranTerakhir', 'profil', 'adaJadwalBaru', 'jadwal'));
+        return view('pelamar.dashboard', compact('user', 'lamaranTerakhir', 'profil', 'adaJadwalBaru', 'jadwal', 'profilLengkap'));
     }
 
     public function syarat() { return view('pelamar.persyaratan'); }
 
-    public function form()
+    public function form(Request $request)
     {
         $user            = Auth::user();
         $lamaranTerakhir = Lamaran::where('user_id', $user->id)->latest()->first();
 
-        // Boleh daftar kalau belum pernah daftar ATAU lamaran terakhir ditolak
         if ($lamaranTerakhir && $lamaranTerakhir->status !== 'ditolak') {
             return redirect()->route('pelamar.dashboard')
                 ->with('error', 'Kamu sudah memiliki lamaran yang sedang diproses.');
         }
 
-        return view('pelamar.form-pendaftaran');
+        $lowongans = \App\Models\Lowongan::where('status', 'buka')
+            ->whereDate('tgl_tutup', '>=', now())
+            ->orderBy('tgl_tutup', 'asc')
+            ->get();
+
+        $lowonganTerpilih = $request->query('lowongan_id');
+
+        return view('pelamar.form-pendaftaran', compact('lowongans', 'lowonganTerpilih'));
     }
 
     public function simpanForm(Request $request)
@@ -56,7 +69,6 @@ class DashboardController extends Controller
         $user            = Auth::user();
         $lamaranTerakhir = Lamaran::where('user_id', $user->id)->latest()->first();
 
-        // Cek apakah boleh daftar lagi
         if ($lamaranTerakhir && $lamaranTerakhir->status !== 'ditolak') {
             return redirect()->route('pelamar.dashboard')
                 ->with('error', 'Kamu sudah memiliki lamaran yang sedang diproses.');
@@ -74,7 +86,7 @@ class DashboardController extends Controller
             'user_id'      => Auth::id(),
             'universitas'  => $request->universitas,
             'tgl_mulai'    => now()->toDateString(),
-            'tgl_selesai'  => now()->addMonths($request->durasi_bulan)->toDateString(),
+            'tgl_selesai'  => now()->addMonths((int) $request->durasi_bulan)->toDateString(),
             'durasi_bulan' => $request->durasi_bulan,
             'status'       => 'pending',
         ]);
@@ -172,24 +184,31 @@ class DashboardController extends Controller
 
     public function updateProfil(Request $request)
     {
-        $user = Auth::user();
+        $user   = Auth::user();
+        $profil = ProfilPelamar::firstOrCreate(['user_id' => $user->id]);
 
         $request->validate([
+            'foto'      => ($profil->foto ? 'nullable' : 'required') . '|image|mimes:jpg,jpeg,png|max:2048',
+            'nim_nis'   => 'required|string|max:50',
+            'no_hp'     => 'required|string|max:20',
+            'institusi' => 'required|string|max:255',
+            'jurusan'   => 'required|string|max:255',
             'bio'       => 'nullable|string|max:255',
             'instagram' => 'nullable|string|max:100',
             'tiktok'    => 'nullable|string|max:100',
             'linkedin'  => 'nullable|string|max:100',
             'github'    => 'nullable|string|max:100',
             'skills'    => 'nullable|string|max:255',
-            'foto'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
-
-        $profil = ProfilPelamar::firstOrCreate(['user_id' => $user->id]);
 
         if ($request->hasFile('foto')) {
             $profil->foto = $request->file('foto')->store('foto-profil', 'public');
         }
 
+        $profil->nim_nis   = $request->nim_nis;
+        $profil->no_hp     = $request->no_hp;
+        $profil->institusi = $request->institusi;
+        $profil->jurusan   = $request->jurusan;
         $profil->bio       = $request->bio;
         $profil->instagram = $request->instagram;
         $profil->tiktok    = $request->tiktok;
@@ -200,6 +219,16 @@ class DashboardController extends Controller
 
         return redirect()->route('pelamar.profil')
             ->with('success', 'Profil berhasil diperbarui!');
+    }
+
+    public function lowongan()
+    {
+        $lowongans = \App\Models\Lowongan::where('status', 'buka')
+            ->whereDate('tgl_tutup', '>=', now())
+            ->orderBy('tgl_tutup', 'asc')
+            ->get();
+
+        return view('pelamar.lowongan', compact('lowongans'));
     }
 
     public function interview()

@@ -107,6 +107,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/profil', [PelamarDashboard::class, 'profil'])->name('profil');
         Route::post('/profil', [PelamarDashboard::class, 'updateProfil'])->name('profil.update');
         Route::get('/interview', [PelamarDashboard::class, 'interview'])->name('interview');
+        Route::get('/lowongan', [PelamarDashboard::class, 'lowongan'])->name('lowongan');
         
         Route::get('/pesan', [PesanController::class, 'index'])->name('pesan.index');
         Route::post('/pesan', [PesanController::class, 'store'])->name('pesan.store');

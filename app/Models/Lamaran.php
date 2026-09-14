@@ -8,6 +8,7 @@ class Lamaran extends Model
 {
     protected $fillable = [
         'user_id',
+        'lowongan_id',
         'universitas',
         'tgl_mulai',
         'tgl_selesai',
@@ -19,6 +20,11 @@ class Lamaran extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function lowongan()
+    {
+        return $this->belongsTo(Lowongan::class);
     }
 
     public function dokumen()

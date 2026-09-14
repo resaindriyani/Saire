@@ -54,7 +54,6 @@
                     <span class="text-lg">🏠</span> Dasbor
                 </a>
 
-                {{-- DIPERBAIKI: Menggunakan pelamar.pesan.index --}}
                 <a href="{{ route('pelamar.pesan.index') }}" class="sidebar-link flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 hover:text-white {{ request()->routeIs('pelamar.pesan.*') ? 'active text-white' : '' }}">
                     <div class="flex items-center gap-3">
                         <span class="text-lg">✉️</span> Pesan
@@ -62,6 +61,9 @@
                     <span id="badge-pesan" class="hidden bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center leading-none"></span>
                 </a>
 
+                <a href="{{ route('pelamar.lowongan') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 hover:text-white {{ request()->routeIs('pelamar.lowongan') ? 'active text-white' : '' }}">
+                    <span class="text-lg">📋</span> Lowongan
+                </a>
                 <a href="{{ route('pelamar.interview') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 hover:text-white {{ request()->routeIs('pelamar.interview') ? 'active text-white' : '' }}">
                     <span class="text-lg">📅</span> Interview
                 </a>
@@ -82,7 +84,7 @@
 
             @elseif(auth()->user()->role === 'admin')
                 <a href="{{ route('admin.dashboard') }}" class="sidebar-link flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 hover:text-white {{ request()->routeIs('admin.dashboard') ? 'active text-white' : '' }}">
-                    <span class="text-lg">📊</span> Dasbor
+                    <span class="text-lg">🏠</span> Dasbor
                 </a>
                 <a href="{{ route('admin.pesan.index') }}" class="sidebar-link flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold text-gray-300 hover:text-white {{ request()->routeIs('admin.pesan.*') ? 'active text-white' : '' }}">
                     <div class="flex items-center gap-3">
@@ -129,12 +131,12 @@
         <main class="flex-1 overflow-y-auto px-6 py-4">
             @if(session('success'))
                 <div class="bg-green-50 border border-green-200 text-green-700 p-4 rounded-xl mb-4 text-sm font-medium">
-                    ✅ {{ session('success') }}
+                    {{ session('success') }}
                 </div>
             @endif
             @if(session('error'))
                 <div class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl mb-4 text-sm font-medium">
-                    ❌ {{ session('error') }}
+                    {{ session('error') }}
                 </div>
             @endif
             @yield('content')

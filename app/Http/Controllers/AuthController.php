@@ -41,88 +41,32 @@ class AuthController extends Controller
 
     public function showRegister()
     {
-        $lowongans = Lowongan::where('status', 'buka')
-            ->whereDate('tgl_buka', '<=', now())
-            ->whereDate('tgl_tutup', '>=', now())
-            ->get();
-        return view('auth.register', compact('lowongans'));
+        return view('auth.register');
     }
 
     public function register(Request $request)
     {
         $request->validate([
-            'name'             => 'required|string|max:255',
-            'email'            => 'required|string|email|max:255|unique:users',
-            'password'         => 'required|string|min:8|confirmed',
-            'nim_nis'          => 'nullable|string|max:50',
-            'institusi'        => 'nullable|string|max:255',
-            'jurusan'          => 'nullable|string|max:255',
-            'no_hp'            => 'nullable|string|max:20',
-            'bio'              => 'nullable|string|max:255',
-            'instagram'        => 'nullable|string|max:100',
-            'tiktok'           => 'nullable|string|max:100',
-            'linkedin'         => 'nullable|string|max:100',
-            'github'           => 'nullable|string|max:100',
-            'foto'             => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'lowongan_id'      => 'nullable|exists:lowongans,id',
-            'universitas'      => 'nullable|string|max:255',
-            'durasi_bulan'     => 'nullable|integer|min:1',
-            'cv'               => 'nullable|file|mimes:pdf,jpg,jpeg|max:2048',
-            'transkrip'        => 'nullable|file|mimes:pdf,jpg,jpeg|max:2048',
-            'surat_pengantar'  => 'nullable|file|mimes:pdf,jpg,jpeg|max:2048',
+            'email'    => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        // Buat user
+        $namaSementara = ucwords(str_replace(['.', '_', '+', '-'], ' ', strstr($request->email, '@', true)));
+
         $user = User::create([
-            'name'     => $request->name,
+            'name'     => $namaSementara,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
             'role'     => 'pelamar',
         ]);
 
-        // Simpan profil
-        $profil = ProfilPelamar::create([
+        ProfilPelamar::create([
             'user_id'   => $user->id,
-            'nim_nis'   => $request->nim_nis ?? '-',
-            'institusi' => $request->institusi ?? '-',
-            'jurusan'   => $request->jurusan ?? '-',
-            'no_hp'     => $request->no_hp ?? '-',
-            'bio'       => $request->bio,
-            'instagram' => $request->instagram,
-            'tiktok'    => $request->tiktok,
-            'linkedin'  => $request->linkedin,
-            'github'    => $request->github,
+            'nim_nis'   => null,
+            'institusi' => null,
+            'jurusan'   => null,
+            'no_hp'     => null,
         ]);
-
-        // Upload foto profil
-        if ($request->hasFile('foto')) {
-            $profil->foto = $request->file('foto')->store('foto-profil', 'public');
-            $profil->save();
-        }
-
-        // Simpan lamaran jika ada CV
-        if ($request->hasFile('cv')) {
-            $lamaran = Lamaran::create([
-                'user_id'      => $user->id,
-                'universitas'  => $request->universitas ?? $request->institusi ?? '-',
-                'tgl_mulai'    => now()->toDateString(),
-                'tgl_selesai'  => now()->addMonths((int) ($request->durasi_bulan ?? 3))->toDateString(),
-                'durasi_bulan' => $request->durasi_bulan ?? 3,
-                'status'       => 'pending',
-            ]);
-
-            foreach (['cv', 'transkrip', 'surat_pengantar'] as $jenis) {
-                if ($request->hasFile($jenis)) {
-                    $path = $request->file($jenis)->store('dokumen/' . $jenis, 'public');
-                    DokumenLamaran::create([
-                        'lamaran_id'    => $lamaran->id,
-                        'jenis'         => $jenis,
-                        'path_file'     => $path,
-                        'original_name' => $request->file($jenis)->getClientOriginalName(),
-                    ]);
-                }
-            }
-        }
 
         event(new Registered($user));
         Auth::login($user);

@@ -19,6 +19,9 @@ class ProfilPelamar extends Model
         'linkedin',
         'github',
         'skills',
+        'cv',
+        'transkrip',
+        'surat_pengantar',
     ];
 
     public function user()

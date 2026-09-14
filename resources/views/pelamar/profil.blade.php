@@ -10,7 +10,6 @@
 
         {{-- Banner --}}
         <div class="h-32 bg-gradient-to-r from-gray-900 via-slate-800 to-red-950 relative">
-            {{-- Foto di tengah bawah banner --}}
             <div class="absolute -bottom-12 left-1/2 -translate-x-1/2">
                 @if($profil && $profil->foto)
                     <img src="{{ asset('storage/' . $profil->foto) }}"
@@ -77,11 +76,21 @@
     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
         <h2 class="text-lg font-bold text-gray-800 mb-6">Edit Profil</h2>
 
+        @if($errors->any())
+            <div class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl mb-4 text-xs">
+                <ul class="list-disc list-inside space-y-1">
+                    @foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach
+                </ul>
+            </div>
+        @endif
+
         <form action="{{ route('pelamar.profil.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="mb-5">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Foto Profil</label>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    Foto Profil <span class="text-red-500">*</span>
+                </label>
                 <div class="flex items-center gap-4">
                     @if($profil && $profil->foto)
                         <img src="{{ asset('storage/' . $profil->foto) }}"
@@ -94,28 +103,66 @@
                     <div class="flex-1">
                         <input type="file" name="foto" accept="image/jpg,image/jpeg,image/png"
                             class="w-full border border-gray-300 rounded-xl px-4 py-2 text-sm file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0 file:bg-red-50 file:text-red-600 file:font-semibold hover:file:bg-red-100 transition">
-                        <p class="text-xs text-gray-400 mt-1">JPG/PNG, maks 2MB</p>
+                        <p class="text-xs text-gray-400 mt-1">JPG/PNG, maks 2MB{{ $profil && $profil->foto ? ' — kosongkan jika tidak ingin ganti' : '' }}</p>
                     </div>
                 </div>
             </div>
 
             <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Email</label>
+                <input type="text" value="{{ $user->email }}" readonly
+                    class="w-full border border-gray-200 bg-gray-100 rounded-xl px-4 py-2.5 text-sm text-gray-500 cursor-not-allowed">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">
+                        NIM/NIS <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="nim_nis" value="{{ old('nim_nis', $profil->nim_nis ?? '') }}"
+                        placeholder="Nomor Induk"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 transition">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">
+                        No. HP <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="no_hp" value="{{ old('no_hp', $profil->no_hp ?? '') }}"
+                        placeholder="08xxxxxxxxxx"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 transition">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">
+                        Nama Sekolah/Universitas <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="institusi" value="{{ old('institusi', $profil->institusi ?? '') }}"
+                        placeholder="Nama Kampus/Sekolah"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 transition">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">
+                        Jurusan <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="jurusan" value="{{ old('jurusan', $profil->jurusan ?? '') }}"
+                        placeholder="Teknik Informatika"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 transition">
+                </div>
+            </div>
+
+
+            <div class="mb-4">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Bio</label>
-                <input type="text" name="bio" value="{{ $profil->bio ?? '' }}"
+                <input type="text" name="bio" value="{{ old('bio', $profil->bio ?? '') }}"
                     placeholder="Ceritakan sedikit tentang dirimu..."
                     class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 transition">
             </div>
 
             <div class="mb-4">
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Jurusan</label>
-                <input type="text" name="jurusan" value="{{ $profil->jurusan ?? '' }}"
-                    placeholder="Contoh: Teknik Informatika"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 transition">
-            </div>
-
-            <div class="mb-4">
                 <label class="block text-sm font-semibold text-gray-700 mb-1">Skills</label>
-                <input type="text" name="skills" value="{{ $profil->skills ?? '' }}"
+                <input type="text" name="skills" value="{{ old('skills', $profil->skills ?? '') }}"
                     placeholder="Contoh: Laravel, React, UI/UX Design"
                     class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 transition">
             </div>
