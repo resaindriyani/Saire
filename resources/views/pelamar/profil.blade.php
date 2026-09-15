@@ -167,43 +167,79 @@
                     class="w-full border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 transition">
             </div>
 
-            <div class="mb-4">
-                <label class="block text-sm font-semibold text-gray-700 mb-1">Instagram</label>
-                <div class="flex items-center border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-pink-400 transition">
-                    <span class="px-3 py-2.5 bg-gradient-to-b from-pink-50 to-purple-50 text-pink-500 text-sm font-bold border-r border-gray-200">@</span>
-                    <input type="text" name="instagram" value="{{ ltrim($profil->instagram ?? '', '@') }}"
-                        placeholder="username_instagram"
-                        class="flex-1 px-4 py-2.5 text-sm focus:outline-none bg-white">
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Instagram</label>
+                    <div class="flex items-center border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-pink-400 transition">
+                        <span class="px-3 py-2.5 bg-gradient-to-b from-pink-50 to-purple-50 text-pink-500 text-sm font-bold border-r border-gray-200">@</span>
+                        <input type="text" name="instagram" value="{{ ltrim($profil->instagram ?? '', '@') }}"
+                            placeholder="username"
+                            class="flex-1 px-4 py-2.5 text-sm focus:outline-none bg-white w-full min-w-0">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">TikTok</label>
+                    <div class="flex items-center border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-gray-400 transition">
+                        <span class="px-3 py-2.5 bg-gray-50 text-gray-700 text-sm font-bold border-r border-gray-200">@</span>
+                        <input type="text" name="tiktok" value="{{ ltrim($profil->tiktok ?? '', '@') }}"
+                            placeholder="username"
+                            class="flex-1 px-4 py-2.5 text-sm focus:outline-none bg-white w-full min-w-0">
+                    </div>
                 </div>
             </div>
 
-            <div class="mb-4">
-                <label class="block text-sm font-semibold text-gray-700 mb-1">TikTok</label>
-                <div class="flex items-center border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-gray-400 transition">
-                    <span class="px-3 py-2.5 bg-gray-50 text-gray-700 text-sm font-bold border-r border-gray-200">@</span>
-                    <input type="text" name="tiktok" value="{{ ltrim($profil->tiktok ?? '', '@') }}"
-                        placeholder="username_tiktok"
-                        class="flex-1 px-4 py-2.5 text-sm focus:outline-none bg-white">
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">LinkedIn</label>
+                    <div class="flex items-center border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-400 transition">
+                        <span class="px-3 py-2.5 bg-blue-50 text-blue-600 text-xs font-bold border-r border-gray-200">in/</span>
+                        <input type="text" name="linkedin" value="{{ ltrim($profil->linkedin ?? '', '@') }}"
+                            placeholder="username"
+                            class="flex-1 px-4 py-2.5 text-sm focus:outline-none bg-white w-full min-w-0">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">GitHub</label>
+                    <div class="flex items-center border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-gray-500 transition">
+                        <span class="px-3 py-2.5 bg-gray-800 text-white text-xs font-bold border-r border-gray-600">gh/</span>
+                        <input type="text" name="github" value="{{ ltrim($profil->github ?? '', '@') }}"
+                            placeholder="username"
+                            class="flex-1 px-4 py-2.5 text-sm focus:outline-none bg-white w-full min-w-0">
+                    </div>
                 </div>
             </div>
 
-            <div class="mb-4">
-                <label class="block text-sm font-semibold text-gray-700 mb-1">LinkedIn</label>
-                <div class="flex items-center border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-400 transition">
-                    <span class="px-3 py-2.5 bg-blue-50 text-blue-600 text-xs font-bold border-r border-gray-200">in/</span>
-                    <input type="text" name="linkedin" value="{{ ltrim($profil->linkedin ?? '', '@') }}"
-                        placeholder="username_linkedin"
-                        class="flex-1 px-4 py-2.5 text-sm focus:outline-none bg-white">
-                </div>
-            </div>
+            <div class="mb-6 pt-4 border-t border-gray-100">
+                <p class="font-bold text-gray-700 mb-3">Dokumen untuk Melamar</p>
 
-            <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-1">GitHub</label>
-                <div class="flex items-center border border-gray-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-gray-500 transition">
-                    <span class="px-3 py-2.5 bg-gray-800 text-white text-xs font-bold border-r border-gray-600">gh/</span>
-                    <input type="text" name="github" value="{{ ltrim($profil->github ?? '', '@') }}"
-                        placeholder="username_github"
-                        class="flex-1 px-4 py-2.5 text-sm focus:outline-none bg-white">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1 text-gray-600">CV / Curriculum Vitae</label>
+                    @if($profil && $profil->cv)
+                        <p class="text-xs text-green-600 mb-1">? Sudah diupload</p>
+                    @endif
+                    <input type="file" name="cv" accept=".pdf,.jpg,.jpeg"
+                        class="w-full border border-gray-300 p-2 rounded-lg text-sm text-gray-600 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-red-50 file:text-red-600 file:font-medium hover:file:bg-red-100">
+                    <p class="text-xs text-gray-400 mt-1">Format: PDF atau JPG. Maks 2MB. {{ $profil && $profil->cv ? 'Kosongkan jika tidak ingin ganti.' : '' }}</p>
+                </div>
+
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1 text-gray-600">Transkrip Nilai</label>
+                    @if($profil && $profil->transkrip)
+                        <p class="text-xs text-green-600 mb-1">? Sudah diupload</p>
+                    @endif
+                    <input type="file" name="transkrip" accept=".pdf,.jpg,.jpeg"
+                        class="w-full border border-gray-300 p-2 rounded-lg text-sm text-gray-600 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-red-50 file:text-red-600 file:font-medium hover:file:bg-red-100">
+                    <p class="text-xs text-gray-400 mt-1">Format: PDF atau JPG. Maks 2MB. {{ $profil && $profil->transkrip ? 'Kosongkan jika tidak ingin ganti.' : '' }}</p>
+                </div>
+
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1 text-gray-600">Surat Pengantar dari Kampus</label>
+                    @if($profil && $profil->surat_pengantar)
+                        <p class="text-xs text-green-600 mb-1">? Sudah diupload</p>
+                    @endif
+                    <input type="file" name="surat_pengantar" accept=".pdf,.jpg,.jpeg"
+                        class="w-full border border-gray-300 p-2 rounded-lg text-sm text-gray-600 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-red-50 file:text-red-600 file:font-medium hover:file:bg-red-100">
+                    <p class="text-xs text-gray-400 mt-1">Format: PDF atau JPG. Maks 2MB. {{ $profil && $profil->surat_pengantar ? 'Kosongkan jika tidak ingin ganti.' : '' }}</p>
                 </div>
             </div>
 

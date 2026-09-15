@@ -188,21 +188,36 @@ class DashboardController extends Controller
         $profil = ProfilPelamar::firstOrCreate(['user_id' => $user->id]);
 
         $request->validate([
-            'foto'      => ($profil->foto ? 'nullable' : 'required') . '|image|mimes:jpg,jpeg,png|max:2048',
-            'nim_nis'   => 'required|string|max:50',
-            'no_hp'     => 'required|string|max:20',
-            'institusi' => 'required|string|max:255',
-            'jurusan'   => 'required|string|max:255',
-            'bio'       => 'nullable|string|max:255',
-            'instagram' => 'nullable|string|max:100',
-            'tiktok'    => 'nullable|string|max:100',
-            'linkedin'  => 'nullable|string|max:100',
-            'github'    => 'nullable|string|max:100',
-            'skills'    => 'nullable|string|max:255',
+            'foto'            => ($profil->foto ? 'nullable' : 'required') . '|image|mimes:jpg,jpeg,png|max:2048',
+            'nim_nis'         => 'required|string|max:50',
+            'no_hp'           => 'required|string|max:20',
+            'institusi'       => 'required|string|max:255',
+            'jurusan'         => 'required|string|max:255',
+            'bio'             => 'nullable|string|max:255',
+            'instagram'       => 'nullable|string|max:100',
+            'tiktok'          => 'nullable|string|max:100',
+            'linkedin'        => 'nullable|string|max:100',
+            'github'          => 'nullable|string|max:100',
+            'skills'          => 'nullable|string|max:255',
+            'cv'              => 'nullable|file|mimes:pdf,jpg,jpeg|max:2048',
+            'transkrip'       => 'nullable|file|mimes:pdf,jpg,jpeg|max:2048',
+            'surat_pengantar' => 'nullable|file|mimes:pdf,jpg,jpeg|max:2048',
         ]);
 
         if ($request->hasFile('foto')) {
             $profil->foto = $request->file('foto')->store('foto-profil', 'public');
+        }
+
+        if ($request->hasFile('cv')) {
+            $profil->cv = $request->file('cv')->store('dokumen/cv', 'public');
+        }
+
+        if ($request->hasFile('transkrip')) {
+            $profil->transkrip = $request->file('transkrip')->store('dokumen/transkrip', 'public');
+        }
+
+        if ($request->hasFile('surat_pengantar')) {
+            $profil->surat_pengantar = $request->file('surat_pengantar')->store('dokumen/surat_pengantar', 'public');
         }
 
         $profil->nim_nis   = $request->nim_nis;
@@ -219,6 +234,91 @@ class DashboardController extends Controller
 
         return redirect()->route('pelamar.profil')
             ->with('success', 'Profil berhasil diperbarui!');
+    }
+
+    public function lamar(Request $request, $lowonganId)
+    {
+        $user            = Auth::user();
+        $lamaranTerakhir = Lamaran::where('user_id', $user->id)->latest()->first();
+
+        if ($lamaranTerakhir && $lamaranTerakhir->status !== 'ditolak') {
+            return redirect()->route('pelamar.dashboard')
+                ->with('error', 'Kamu sudah memiliki lamaran yang sedang diproses.');
+        }
+
+        $profil = ProfilPelamar::where('user_id', $user->id)->first();
+
+        if (!$profil || !$profil->cv || !$profil->transkrip || !$profil->surat_pengantar) {
+            return redirect()->route('pelamar.profil')
+                ->with('error', 'Lengkapi dokumen (CV, Transkrip, Surat Pengantar) di halaman Profil terlebih dahulu sebelum melamar.');
+        }
+
+        if (!$profil->institusi) {
+            return redirect()->route('pelamar.profil')
+                ->with('error', 'Lengkapi data Universitas di halaman Profil terlebih dahulu sebelum melamar.');
+        }
+
+        $lowongan = \App\Models\Lowongan::findOrFail($lowonganId);
+
+        $lamaran = Lamaran::create([
+            'user_id'      => $user->id,
+            'lowongan_id'  => $lowongan->id,
+            'universitas'  => $profil->institusi,
+            'tgl_mulai'    => now()->toDateString(),
+            'tgl_selesai'  => now()->addMonths($lowongan->durasi_bulan)->toDateString(),
+            'durasi_bulan' => $lowongan->durasi_bulan,
+            'status'       => 'pending',
+        ]);
+
+        $dokumenMap = [
+            'cv'              => $profil->cv,
+            'transkrip'       => $profil->transkrip,
+            'surat_pengantar' => $profil->surat_pengantar,
+        ];
+
+        foreach ($dokumenMap as $jenis => $path) {
+            DokumenLamaran::create([
+                'lamaran_id'    => $lamaran->id,
+                'jenis'         => $jenis,
+                'path_file'     => $path,
+                'original_name' => basename($path),
+            ]);
+        }
+
+        return redirect()->route('pelamar.lowongan.show', $lowongan->id)
+            ->with('success', 'Lamaran berhasil dikirim!');
+    }
+
+    public function showLowongan($id)
+    {
+        $lowongan = \App\Models\Lowongan::findOrFail($id);
+        $user     = Auth::user();
+
+        $lamaranAktif = Lamaran::where('user_id', $user->id)
+            ->where('lowongan_id', $id)
+            ->whereIn('status', ['pending', 'review', 'diterima'])
+            ->latest()
+            ->first();
+
+        return view('pelamar.lowongan-detail', compact('lowongan', 'lamaranAktif'));
+    }
+
+    public function batalLamaran($id)
+    {
+        $user    = Auth::user();
+        $lamaran = Lamaran::where('user_id', $user->id)
+            ->where('lowongan_id', $id)
+            ->where('status', 'pending')
+            ->first();
+
+        if (!$lamaran) {
+            return back()->with('error', 'Lamaran tidak ditemukan atau tidak bisa dibatalkan.');
+        }
+
+        $lamaran->delete();
+
+        return redirect()->route('pelamar.lowongan.show', $id)
+            ->with('success', 'Lamaran berhasil dibatalkan.');
     }
 
     public function lowongan()

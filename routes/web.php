@@ -108,6 +108,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/profil', [PelamarDashboard::class, 'updateProfil'])->name('profil.update');
         Route::get('/interview', [PelamarDashboard::class, 'interview'])->name('interview');
         Route::get('/lowongan', [PelamarDashboard::class, 'lowongan'])->name('lowongan');
+        Route::get('/lowongan/{id}', [PelamarDashboard::class, 'showLowongan'])->name('lowongan.show');
+        Route::post('/lowongan/{id}/lamar', [PelamarDashboard::class, 'lamar'])->name('lamar');
+        Route::post('/lowongan/{id}/batal', [PelamarDashboard::class, 'batalLamaran'])->name('batalLamaran');
         
         Route::get('/pesan', [PesanController::class, 'index'])->name('pesan.index');
         Route::post('/pesan', [PesanController::class, 'store'])->name('pesan.store');

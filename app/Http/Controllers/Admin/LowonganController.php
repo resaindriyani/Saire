@@ -35,7 +35,8 @@ class LowonganController extends Controller
         $request->validate([
             'judul'     => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'kuota'     => 'required|integer|min:1',
+            'kuota'         => 'required|integer|min:1',
+            'durasi_bulan'  => 'required|integer|min:1',
             'tgl_buka'  => 'required|date',
             'tgl_tutup' => 'required|date|after:tgl_buka',
             'status'    => 'required|in:buka,tutup',
@@ -58,7 +59,8 @@ class LowonganController extends Controller
         $request->validate([
             'judul'     => 'required|string|max:255',
             'deskripsi' => 'required|string',
-            'kuota'     => 'required|integer|min:1',
+            'kuota'         => 'required|integer|min:1',
+            'durasi_bulan'  => 'required|integer|min:1',
             'tgl_buka'  => 'required|date',
             'tgl_tutup' => 'required|date|after:tgl_buka',
             'status'    => 'required|in:buka,tutup',

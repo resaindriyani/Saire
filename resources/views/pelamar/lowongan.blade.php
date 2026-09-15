@@ -22,9 +22,9 @@
                         <span>Tutup: <strong class="text-gray-700">{{ $lowongan->tgl_tutup->format('d M Y') }}</strong></span>
                     </div>
 
-                    <a href="{{ route('pelamar.form', ['lowongan_id' => $lowongan->id]) }}"
+                    <a href="{{ route('pelamar.lowongan.show', $lowongan->id) }}"
                         class="inline-flex mt-4 bg-red-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-red-700 transition">
-                        Daftar Sekarang
+                        Lihat Detail
                     </a>
                 </div>
             @endforeach
@@ -36,4 +36,39 @@
     @endif
 
 </div>
+    {{-- Modal Konfirmasi --}}
+    <div id="modal-konfirmasi" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
+            <h3 class="text-lg font-bold text-gray-900 mb-2">Konfirmasi Pendaftaran</h3>
+            <p class="text-sm text-gray-500 mb-6">
+                Yakin ingin melamar posisi <strong id="modal-judul-lowongan"></strong>? Dokumen (CV, Transkrip, Surat Pengantar) dari profil kamu akan digunakan.
+            </p>
+            <form id="form-lamar" method="POST" action="">
+                @csrf
+                <div class="flex gap-3">
+                    <button type="button" onclick="tutupModal()"
+                        class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl text-sm transition">
+                        Batal
+                    </button>
+                    <button type="submit"
+                        class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl text-sm transition">
+                        Ya, Lamar Sekarang
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const baseLamarUrl = "{{ route('pelamar.lamar', ['id' => '__ID__']) }}";
+        function konfirmasiLamar(id, judul) {
+            document.getElementById('modal-judul-lowongan').textContent = judul;
+            document.getElementById('form-lamar').action = baseLamarUrl.replace('__ID__', id);
+            document.getElementById('modal-konfirmasi').classList.remove('hidden');
+        }
+
+        function tutupModal() {
+            document.getElementById('modal-konfirmasi').classList.add('hidden');
+        }
+    </script>
 @endsection

@@ -66,7 +66,7 @@
                         </div>
                     @endif
                     <p class="text-xs text-red-400 mt-3 mb-4">Anda dapat mencoba mendaftar kembali di periode berikutnya.</p>
-                    <a href="{{ route('pelamar.form') }}"
+                    <a href="{{ route('pelamar.lowongan') }}"
                         class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl text-sm transition">
                         📝 Daftar Ulang Magang
                     </a>
@@ -160,7 +160,7 @@
                     <p class="text-sm text-red-600 mt-0.5">Silakan lengkapi data pendaftaran magang kamu.</p>
                 </div>
                 @if($profilLengkap)
-                    <a href="{{ route('pelamar.form') }}"
+                    <a href="{{ route('pelamar.lowongan') }}"
                         class="bg-red-600 text-white px-5 py-2 rounded-xl text-sm font-bold hover:bg-red-700 transition whitespace-nowrap">
                         Daftar Sekarang
                     </a>

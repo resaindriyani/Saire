@@ -10,6 +10,7 @@ class Lowongan extends Model
         'judul',
         'deskripsi',
         'kuota',
+        'durasi_bulan',
         'tgl_buka',
         'tgl_tutup',
         'status',
