@@ -27,9 +27,18 @@
                         <span class="inline-block px-3 py-1 rounded-lg bg-red-50 text-red-600 text-xs font-bold uppercase tracking-wider mb-3">
                             {{ \Carbon\Carbon::parse($log->tanggal)->format('d F Y') }}
                         </span>
-                        <p class="text-gray-800 leading-relaxed">
+                        <h3 class="font-bold text-gray-900 mb-1">{{ $log->judul_kegiatan }}</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed">
                             {{ $log->deskripsi_kegiatan }}
                         </p>
+                        <div class="flex gap-4 mt-3">
+                            @if($log->link_tugas)
+                                <a href="{{ $log->link_tugas }}" target="_blank" class="text-sm text-blue-600 hover:underline font-semibold">Lihat Tugas</a>
+                            @endif
+                            @if($log->foto)
+                                <a href="{{ asset('storage/' . $log->foto) }}" target="_blank" class="text-sm text-green-600 hover:underline font-semibold">Lihat Foto</a>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
